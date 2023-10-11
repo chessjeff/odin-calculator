@@ -10,38 +10,40 @@ nums.forEach((num) => {
     num.addEventListener('click', () => writeNumbers(num.id));
 });
 
-
-//creates array to be converted to string by operating function
-function writeNumbers(num) {
-    if (!expression.op) {
-        expression.a.push(num);
-    } else {
-        expression.b.push(num); 
-    }
-}
-
-//when op is added, writeNumbers adds to b
 //can only take one op and only after a is true
 const operators = Array.from(document.getElementsByClassName('operator'));
 operators.forEach((operator) => {
     operator.addEventListener('click', () => {
-        if (expression.a && !expression.op) {
+        if (expression.a.length > 0 && !expression.op) {
             expression.op = operator.textContent;
         };
     })
 })
 
-//pressing equals calls operate()
+//pressing equals executes expression
 const equals = Array.from(document.getElementsByClassName('equals'));
 equals.forEach((button) => {
     button.addEventListener('click', () => {
-        execute();
+        if (expression.op && expression.b.length > 0) {
+            execute();
+        }
     })
 });
 
+//creates arrays to be converted to string by execute function
+function writeNumbers(num) {
+    //writes a first and waits for operator selection to write b
+    if (!expression.op) {
+        expression.a.push(num);
+    } else {
+        expression.b.push(num); 
+    }
+
+}
+
 function execute() {
-    a = expression.a.join(expression.a, '');
-    b = expression.b.join(expression.b, '');
+    a = parseInt(expression.a.join(expression.a, ''));
+    b = parseInt(expression.b.join(expression.b, ''));
     const result = chooseOperator(a, b);
     console.log(result);
 }
