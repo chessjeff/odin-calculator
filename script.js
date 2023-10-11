@@ -7,11 +7,9 @@ let expression = {
 //each number listens and adds itself via writeNumbers
 const nums = Array.from(document.getElementsByClassName('num'));
 nums.forEach((num) => {
-    num.addEventListener('click', () => writeNumbers(num.id))
+    num.addEventListener('click', () => writeNumbers(num.id));
 });
 
-//when equals is pushed insert: expression.a = expression.a.join(expression.a, '');
-// and expression.b = expression.b.join(b, '');
 
 //creates array to be converted to string by operating function
 function writeNumbers(num) {
@@ -24,31 +22,40 @@ function writeNumbers(num) {
 
 //when op is added, writeNumbers adds to b
 //can only take one op and only after a is true
-const operators = Array.from(document.getElementsByClassName('operator'))
+const operators = Array.from(document.getElementsByClassName('operator'));
 operators.forEach((operator) => {
     operator.addEventListener('click', () => {
         if (expression.a && !expression.op) {
-            expression.op = operator.textContent
+            expression.op = operator.textContent;
         };
     })
 })
 
 //pressing equals calls operate()
+const equals = Array.from(document.getElementsByClassName('equals'));
+equals.forEach((button) => {
+    button.addEventListener('click', () => {
+        execute();
+    })
+});
 
+function execute() {
+    a = expression.a.join(expression.a, '');
+    b = expression.b.join(expression.b, '');
+    const result = chooseOperator(a, b);
+    console.log(result);
+}
 
-function chooseOperator() {
+function chooseOperator(a, b) {
     switch (expression.op) {
         case '+':
-            add(expression.a, expression.b);
-            break;
+            return add(a, b);
         case '-':
-            subtract(expression.a, expression.b);
-            break;
+            return subtract(a, b);
         case '*':
-            multiply(expression.a, expression.b);
-            break;
+            return multiply(a, b);
         case '/':
-            divide(expression.a, expression.b);
+            return divide(a, b);
     }
 }
 
