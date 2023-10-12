@@ -2,6 +2,20 @@ let expression = {
     a: [],
     op: '',
     b: [],
+    aChosen: false,
+    bChosen: false,
+    opAgain: false,
+}
+
+function clearExpression() {
+    expression = {
+        a: [],
+        op: '',
+        b: [],
+        aChosen: false,
+        bChosen: false,
+        opAgain: false,
+    }
 }
 
 const display = document.querySelector('.display')
@@ -18,10 +32,18 @@ nums.forEach((num) => {
 const operators = Array.from(document.getElementsByClassName('operator'));
 operators.forEach((operator) => {
     operator.addEventListener('click', () => {
-        if (expression.a.length > 0 && !expression.op) {
+        // check if first op or further op
+        if (expression.aChosen && !expression.op) {
             expression.op = operator.textContent;
+            expression.opAgain = true; 
             writeExpression();
-        };
+        
+        } else if (expression.opAgain && expression.bChosen) {
+            execute();
+            expression.op = operator.textContent;
+            expression.opAgain = true;
+            writeExpression();
+        }
     })
 })
 
@@ -29,7 +51,7 @@ operators.forEach((operator) => {
 const equals = Array.from(document.getElementsByClassName('equals'));
 equals.forEach((button) => {
     button.addEventListener('click', () => {
-        if (expression.op && expression.b.length > 0) {
+        if (expression.op && expression.bChosen) {
             execute();
         }
     })
@@ -44,33 +66,32 @@ clear.forEach((button) => {
     })
 })
 
-function clearExpression() {
-    expression = {
-        a: [],
-        op: '',
-        b: [],
-    }
-}
-
 //requires 'a' to be selected, then an operator, then 'b'
 function writeExpression(num) {
     let text = display.textContent;
+
     //first button press expression.a will be empty
     //after check if no operator
-    if (expression.a.length < 1 || !expression.op) {
+    if (!expression.aChosen || !expression.op) {
         if (!expression.op) {
+
             expression.a.push(num);
             a = parseInt(expression.a.join(expression.a, ''));
             display.textContent = a;
+
+            expression.aChosen = true;
         }
     //make sure an operator is selected
     } else if (!(text.includes('+') || text.includes('-') || text.includes('*') || text.includes('/'))) {
         display.textContent = a + ' ' + expression.op;
+
     //b logic similar to a
     } else {
         expression.b.push(num);
         b = parseInt(expression.b.join(expression.b, ''));
         display.textContent = a + ' ' + expression.op + ' ' + b;
+
+        expression.bChosen = true;
     }
 }
 
@@ -81,11 +102,10 @@ function execute() {
     //lets continuous operations be done
     a = operate(a, b);
     display.textContent = a;
-    expression = {
-        a: Array.from(a.toString()).map(Number),
-        op: '',
-        b: [],
-    }
+    clearExpression();
+    expression.a = Array.from(a.toString()).map(Number);
+    expression.aChosen = true;
+
 }
 
 function operate(a, b) {
