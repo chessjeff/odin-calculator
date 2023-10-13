@@ -35,6 +35,7 @@ const operators = Array.from(document.getElementsByClassName('operator'));
 operators.forEach((operator) => {
     operator.addEventListener('click', () => {
         // check if first op or further op
+        expression.aChosen = true;
         if (expression.bChosen) {
             execute();
             writeExpression(operator.id);
@@ -69,7 +70,7 @@ function writeExpression(input) {
     //after check if no operator
     if (!expression.aChosen) {  // only goes if aChosen is false
         expression.a.push(input);
-        expression.aChosen = true;
+        //expression.aChosen = true;
         if (expression.a.slice(-1) == '.') {
             //check if last selection was decimal
             a = parseInt(expression.a.join('')) + '.';
