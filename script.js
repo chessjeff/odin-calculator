@@ -16,11 +16,13 @@ function clearExpression() {
         bChosen: false,
         opAgain: false,
     }
+    decimal.disabled = false;
 }
 
-const display = document.querySelector('.display')
+const display = document.querySelector('.display');
+const decimal = document.getElementById('.');
 
-//each number listens and adds itself via writeNumbers
+//logic for writing numbers
 const nums = Array.from(document.getElementsByClassName('num'));
 nums.forEach((num) => {
     num.addEventListener('click', () => {
@@ -33,16 +35,11 @@ const operators = Array.from(document.getElementsByClassName('operator'));
 operators.forEach((operator) => {
     operator.addEventListener('click', () => {
         // check if first op or further op
-        if (expression.aChosen && !expression.op) {
-            expression.op = operator.textContent;
-            expression.opAgain = true; 
-            writeExpression();
-        
-        } else if (expression.opAgain && expression.bChosen) {
+        if (expression.bChosen) {
             execute();
-            expression.op = operator.textContent;
-            expression.opAgain = true;
-            writeExpression();
+            writeExpression(operator.id);
+        } else {
+            writeExpression(operator.id);
         }
     })
 })
@@ -67,45 +64,52 @@ clear.forEach((button) => {
 })
 
 //requires 'a' to be selected, then an operator, then 'b'
-function writeExpression(num) {
-    let text = display.textContent;
-
+function writeExpression(input) {
     //first button press expression.a will be empty
     //after check if no operator
-    if (!expression.aChosen || !expression.op) {
-        if (!expression.op) {
-
-            expression.a.push(num);
-            a = parseInt(expression.a.join(expression.a, ''));
+    if (!expression.aChosen) {  // only goes if aChosen is false
+        expression.a.push(input);
+        expression.aChosen = true;
+        if (expression.a.slice(-1) == '.') {
+            //check if last selection was decimal
+            a = parseInt(expression.a.join('')) + '.';
+            display.textContent = a
+            decimal.disabled = true;
+        } else if (expression.a.slice(-1) != '.'){
+            a = parseFloat(expression.a.join(''));
             display.textContent = a;
-
-            expression.aChosen = true;
         }
-    //make sure an operator is selected
-    } else if (!(text.includes('+') || text.includes('-') || text.includes('*') || text.includes('/'))) {
+    //confirm a is selected and allow operator to be selected
+    } else if (expression.aChosen && !(expression.op)) {
+        expression.op = input
         display.textContent = a + ' ' + expression.op;
-
+        decimal.disabled = false;
     //b logic similar to a
     } else {
-        expression.b.push(num);
-        b = parseInt(expression.b.join(expression.b, ''));
-        display.textContent = a + ' ' + expression.op + ' ' + b;
-
+        expression.b.push(input);
         expression.bChosen = true;
+        if (expression.b.slice(-1) == '.') {
+            b = parseInt(expression.b.join('')) + '.';
+            display.textContent = a + ' ' + expression.op + ' ' + b;
+            decimal.disabled = true;
+        } else if (expression.b.slice(-1) != '.') {
+            b = parseFloat(expression.b.join(''));
+            display.textContent = a + ' ' + expression.op + ' ' + b;
+        }   
     }
 }
 
 function execute() {
-    a = parseInt(expression.a.join(expression.a, ''));
-    b = parseInt(expression.b.join(expression.b, ''));
-    
+    a = parseFloat(expression.a.join(''));
+    b = parseFloat(expression.b.join(''));
     //lets continuous operations be done
     a = operate(a, b);
     display.textContent = a;
     clearExpression();
-    expression.a = Array.from(a.toString()).map(Number);
+    expression.a = Array.from(a.toString());
     expression.aChosen = true;
-
+    decimal.disabled = true;
+    expression.opAgain = true;
 }
 
 function operate(a, b) {
@@ -120,6 +124,7 @@ function operate(a, b) {
             if (b == 0) {
                 clearExpression();
                 alert("DON'T DO THAT");
+                return expression.a = '0';
             } else {
                 return operations.divide(a, b);
             }
@@ -137,6 +142,6 @@ const operations = {
         return a * b;
     },
     divide(a, b) {
-        return a / b;
+        return Math.round((a / b) * 1000) / 1000;
     }
 }
