@@ -1,0 +1,50 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: monospace;
+}
+
+button {
+    flex: 1;
+    border-radius: 4px;
+    font-size: 40px;
+    font-family: monospace;
+    margin:1px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 320px;
+    width: 300px;
+    padding: 20px;
+    background-color: #424242;
+    border-radius: 15px;
+}
+
+.display {
+    background-color: #FCFC62;
+    text-align: right;
+    padding: 4px;
+    margin: 1px;
+    font-size: 32px;
+    border-radius: 4px;
+}
+
+.rows {
+    display: flex;
+    justify-content: space-between;
+    height: 55px;
+}
+
+.num {
+    background-color: #C9C9C9;
+}
+
+.operator,
+.equals,
+.clear {
+    background-color: #A3A3A3;
+}

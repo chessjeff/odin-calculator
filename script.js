@@ -17,7 +17,6 @@ function clearExpression() {
         opAgain: false,
     }
     decimal.disabled = false;
-
 }
 
 const display = document.querySelector('.display');
@@ -40,9 +39,9 @@ operators.forEach((operator) => {
         decimal.disabled = false;
         if (expression.bChosen) {
             execute();
-            writeExpression(operator.id);
+            writeExpression(operator.value);
         } else {
-            writeExpression(operator.id);
+            writeExpression(operator.value);
         }
     })
 })
@@ -103,12 +102,16 @@ function execute() {
     b = parseFloat(expression.b.join(''));
     //lets continuous operations be done
     a = operate(a, b);
-    display.textContent = a;
-    clearExpression();
-    expression.a = Array.from(a.toString());
-    expression.aChosen = true;
-    decimal.disabled = true;
-    expression.opAgain = true;
+    if (isNaN(a)) {
+        clearExpression()
+        display.textContent = 'SyntaxError'
+    } else {
+        display.textContent = a;
+        clearExpression();
+        expression.a = Array.from(a.toString());
+        expression.aChosen = true;
+        expression.opAgain = true;
+    }
 }
 
 function operate(a, b) {
@@ -123,7 +126,7 @@ function operate(a, b) {
             if (b == 0) {
                 clearExpression();
                 alert("DON'T DO THAT");
-                return expression.a = '0';
+                return expression.a = ['0'];
             } else {
                 return operations.divide(a, b);
             }
