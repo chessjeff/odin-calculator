@@ -1,7 +1,7 @@
 let expression = {
-    a: [],
+    a: ['0'],
     op: '',
-    b: [],
+    b: ['0'],
     aChosen: false,
     bChosen: false,
     opAgain: false,
@@ -9,14 +9,15 @@ let expression = {
 
 function clearExpression() {
     expression = {
-        a: [],
+        a: ['0'],
         op: '',
-        b: [],
+        b: ['0'],
         aChosen: false,
         bChosen: false,
         opAgain: false,
     }
     decimal.disabled = false;
+
 }
 
 const display = document.querySelector('.display');
@@ -36,6 +37,7 @@ operators.forEach((operator) => {
     operator.addEventListener('click', () => {
         // check if first op or further op
         expression.aChosen = true;
+        decimal.disabled = false;
         if (expression.bChosen) {
             execute();
             writeExpression(operator.id);
@@ -59,44 +61,40 @@ equals.forEach((button) => {
 const clear = Array.from(document.getElementsByClassName('clear'));
 clear.forEach((button) => {
     button.addEventListener('click', () => {
-        display.textContent = '0';
         clearExpression();
+        display.textContent = expression.a;
     })
 })
 
 //requires 'a' to be selected, then an operator, then 'b'
 function writeExpression(input) {
-    //first button press expression.a will be empty
-    //after check if no operator
-    if (!expression.aChosen) {  // only goes if aChosen is false
+    if (!expression.aChosen) {
         expression.a.push(input);
-        //expression.aChosen = true;
+        let aSelection = expression.a.join('');
         if (expression.a.slice(-1) == '.') {
-            //check if last selection was decimal
-            a = parseInt(expression.a.join('')) + '.';
-            display.textContent = a
+            //doesn't allow more than one decimal point to be chosen            
             decimal.disabled = true;
-        } else if (expression.a.slice(-1) != '.'){
-            a = parseFloat(expression.a.join(''));
-            display.textContent = a;
+        } else if (!(expression.a.join('').includes('0.', 0))){
+            // add a while loop to avoid spam 0s
+            // need to find away to remove 0s
+            aSelection = expression.a.join('').substring(1);
         }
+        display.textContent = aSelection;
     //confirm a is selected and allow operator to be selected
     } else if (expression.aChosen && !(expression.op)) {
         expression.op = input
-        display.textContent = a + ' ' + expression.op;
-        decimal.disabled = false;
+        display.textContent = expression.a.join('') + ' ' + expression.op;
     //b logic similar to a
     } else {
         expression.b.push(input);
         expression.bChosen = true;
+        let bSelection = expression.b.join('');
         if (expression.b.slice(-1) == '.') {
-            b = parseInt(expression.b.join('')) + '.';
-            display.textContent = a + ' ' + expression.op + ' ' + b;
             decimal.disabled = true;
-        } else if (expression.b.slice(-1) != '.') {
-            b = parseFloat(expression.b.join(''));
-            display.textContent = a + ' ' + expression.op + ' ' + b;
-        }   
+        } else if (!(expression.b.join('').includes('0.', 0))) {
+            bSelection = expression.b.join('').substring(1);
+        }
+        display.textContent = expression.a.join('') + ' ' + expression.op + ' ' + bSelection;
     }
 }
 
