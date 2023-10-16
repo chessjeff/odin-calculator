@@ -72,12 +72,11 @@ function writeExpression(input) {
         expression.a.push(input);
         let aSelection = expression.a.join('');
         if (expression.a.slice(-1) == '.') {
-            //doesn't allow more than one decimal point to be chosen            
+            //only one decimal allowed          
             decimal.disabled = true;
-        } else if (!(expression.a.join('').includes('0.', 0))){
-            // add a while loop to avoid spam 0s
-            // need to find away to remove 0s
-            aSelection = expression.a.join('').substring(1);
+        } else if (expression.a[0] === '0' && expression.a[1] !== '.') {
+            expression.a.shift();
+            aSelection = expression.a.join('')
         }
         display.textContent = aSelection;
     //confirm a is selected and allow operator to be selected
@@ -86,14 +85,15 @@ function writeExpression(input) {
         display.textContent = expression.a.join('') + ' ' + expression.op;
     //b logic similar to a
     } else {
-        expression.b.push(input);
         expression.bChosen = true;
+        expression.b.push(input);
         let bSelection = expression.b.join('');
         if (expression.b.slice(-1) == '.') {
             decimal.disabled = true;
-        } else if (!(expression.b.join('').includes('0.', 0))) {
-            bSelection = expression.b.join('').substring(1);
-        }
+        } else if (expression.b[0] === '0' && expression.b[1] !== '.') {
+            expression.b.shift();
+            bSelection = expression.b.join('');
+        } 
         display.textContent = expression.a.join('') + ' ' + expression.op + ' ' + bSelection;
     }
 }
