@@ -17,18 +17,18 @@ button {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 320px;
-    width: 300px;
+    width: 250px;
     padding: 20px;
     background-color: #424242;
     border-radius: 15px;
 }
 
 .display {
+    flex: 1;
     background-color: #FCFC62;
     text-align: right;
     padding: 4px;
-    margin: 1px;
+    margin: 0px 1px 4px;
     font-size: 32px;
     border-radius: 4px;
 }

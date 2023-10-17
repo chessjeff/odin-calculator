@@ -21,6 +21,7 @@ function clearExpression() {
 
 const display = document.querySelector('.display');
 const decimal = document.getElementById('.');
+const allowedOperands = '1234567890.'
 
 //logic for writing numbers
 const nums = Array.from(document.getElementsByClassName('num'));
@@ -83,7 +84,7 @@ function writeExpression(input) {
         expression.op = input
         display.textContent = expression.a.join('') + ' ' + expression.op;
     //b logic similar to a
-    } else {
+    } else if (allowedOperands.includes(input)) {
         expression.bChosen = true;
         expression.b.push(input);
         let bSelection = expression.b.join('');
@@ -101,7 +102,7 @@ function execute() {
     a = parseFloat(expression.a.join(''));
     b = parseFloat(expression.b.join(''));
     //lets continuous operations be done
-    a = operate(a, b);
+    a = Math.round(operate(a, b) * 1000) / 1000;
     if (isNaN(a)) {
         clearExpression()
         display.textContent = 'SyntaxError'
@@ -144,6 +145,6 @@ const operations = {
         return a * b;
     },
     divide(a, b) {
-        return Math.round((a / b) * 1000) / 1000;
+        return (a / b);
     }
 }
