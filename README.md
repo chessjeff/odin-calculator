@@ -1,2 +1,10 @@
 # odin-calculator
-odin-calculator
+This is the final project for The Odin Project foundations course. It is a calculator that adds, subtracts, multiplies, and divides. The code is written so that the first entry must be a number, followed by an operator, and then another number. When the equals sign or another operator is selected after the last number is written, the result is shown and is set as the first number of a new expression. This allows further operations to be done. 
+
+The calculator also handles decimals values. When a decimal is input by the user, the decimal button is disabled for that half of the expression and is enabled after and operator is pressed or a result is printed. The result only prints up to three decimal places, and results with more than three decimal places are rounded. The user may input as many digits in as they like. 
+
+For this project, I made everything to do with the printed expression part of an object <expression>. The operands are both arrays, which are turned to strings using <array.join('')> and then floats with <parseInt>. The operator is recorded as a string. When the program calculates an expression, a function takes the two operands as floats, and then decides which operation to use based on what the operator in the expression object is. <expression> also contains properties with boolean values, which allow the program to decide what part of the expression may be written at anytime. 
+
+On the screen, my calculator is a grid of <buttons> with a <div> for the display on top. I used the flex property in css to arrange them on the screen the way I wanted them, and used a random color pallette generator to decide the colors. One thing that I would improve about this project is the way the display handles a large amount of text.
+
+This project is representation of my firm understanding of JavaScript, HTML, and CSS fundamentals.

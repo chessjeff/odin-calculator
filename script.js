@@ -5,6 +5,7 @@ let expression = {
     aChosen: false,
     bChosen: false,
     opAgain: false,
+    opChosen: false,
 }
 
 function clearExpression() {
@@ -15,13 +16,15 @@ function clearExpression() {
         aChosen: false,
         bChosen: false,
         opAgain: false,
+        opChosen: false,
     }
     decimal.disabled = false;
 }
 
 const display = document.querySelector('.display');
 const decimal = document.getElementById('.');
-const allowedOperands = '1234567890.'
+const allowedOperands = '1234567890.';
+const allowedOperators = '+-*/';
 
 //logic for writing numbers
 const nums = Array.from(document.getElementsByClassName('num'));
@@ -80,11 +83,12 @@ function writeExpression(input) {
         }
         display.textContent = aSelection;
     //confirm a is selected and allow operator to be selected
-    } else if (expression.aChosen && !(expression.op)) {
-        expression.op = input
+    } else if (expression.aChosen && !(expression.op) && allowedOperators.includes(input)) {
+        expression.op = input;
+        expression.opChosen = true;
         display.textContent = expression.a.join('') + ' ' + expression.op;
     //b logic similar to a
-    } else if (allowedOperands.includes(input)) {
+    } else if (allowedOperands.includes(input) && expression.opChosen) {
         expression.bChosen = true;
         expression.b.push(input);
         let bSelection = expression.b.join('');
